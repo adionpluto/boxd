@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS with Cache-Busting -->
-    <link rel="stylesheet" href="css/style.css?v=2.1">
+    <link rel="stylesheet" href="css/style.css?v=2.5">
 </head>
 <body>
     <header class="app-header">
@@ -87,10 +87,16 @@
                             <div class="sort-control">
                                 <label for="sort-select">Sort:</label>
                                 <select id="sort-select">
-                                    <option value="Date Watched ↓">Date Watched ↓</option>
-                                    <option value="Rating ↓">Rating ↓</option>
-                                    <option value="Year ↓">Year ↓</option>
+                                    <option value="Date Watched ↓">Date Watched ↓ (Newest)</option>
+                                    <option value="Date Watched ↑">Date Watched ↑ (Oldest)</option>
+                                    <option value="Rating ↓">Rating ↓ (Highest 5★)</option>
+                                    <option value="Rating ↑">Rating ↑ (Lowest ½★)</option>
+                                    <option value="Year ↓">Release Year ↓ (Newest)</option>
+                                    <option value="Year ↑">Release Year ↑ (Oldest)</option>
                                     <option value="Title A-Z">Title A-Z</option>
+                                    <option value="Title Z-A">Title Z-A</option>
+                                    <option value="Runtime ↓">Runtime ↓ (Longest)</option>
+                                    <option value="Runtime ↑">Runtime ↑ (Shortest)</option>
                                 </select>
                             </div>
                         </div>
@@ -106,8 +112,22 @@
                 <!-- User Profile Hero -->
                 <div id="profile-hero-card" class="profile-hero-card hidden"></div>
 
+                <!-- Summary KPI Cards -->
                 <div class="summary-cards" id="summary-cards"></div>
 
+                <!-- Milestones (First, Latest, Longest, Shortest, Peak Decade) -->
+                <div id="stats-milestones" class="stats-milestones-grid"></div>
+
+                <!-- Highest Rated Films (5-Star & Top Rated Showcase) -->
+                <div class="stats-section-block">
+                    <div class="section-title-row">
+                        <h3>Highest Rated Films</h3>
+                        <span class="section-sub">Your personal hall of fame</span>
+                    </div>
+                    <div id="stats-top-rated-grid" class="stats-posters-row"></div>
+                </div>
+
+                <!-- Core Charts Grid -->
                 <div class="charts-grid">
                     <div class="chart-card full-width">
                         <h3>Films Per Month</h3>
@@ -147,6 +167,81 @@
                     <div class="chart-card">
                         <h3>Avg Rating Over Time</h3>
                         <div class="chart-container"><canvas id="chart-rating-trend"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Most Watched Directors (Rich Letterboxd Multi-Card View) -->
+                <div class="stats-section-block">
+                    <div class="section-title-row">
+                        <h3>Most Watched Directors</h3>
+                        <span class="section-sub">Filmmakers with the most logs • Click to visit on Letterboxd</span>
+                    </div>
+                    <div id="stats-directors-cards" class="person-cards-grid"></div>
+                </div>
+
+                <!-- Most Watched Cast (Rich Letterboxd Multi-Card View) -->
+                <div class="stats-section-block">
+                    <div class="section-title-row">
+                        <h3>Most Watched Cast</h3>
+                        <span class="section-sub">Actors appearing most often • Click to visit on Letterboxd</span>
+                    </div>
+                    <div id="stats-actors-cards" class="person-cards-grid"></div>
+                </div>
+
+                <!-- Decades & Genres Deep Dive -->
+                <div class="two-col-grid">
+                    <div class="stats-card-box">
+                        <div class="box-header">
+                            <h3>Decades Breakdown</h3>
+                            <span class="box-sub">Click decade to browse</span>
+                        </div>
+                        <div id="stats-decades-list" class="stats-breakdown-list"></div>
+                    </div>
+
+                    <div class="stats-card-box">
+                        <div class="box-header">
+                            <h3>Genres Breakdown</h3>
+                            <span class="box-sub">Click genre to browse</span>
+                        </div>
+                        <div id="stats-genres-list" class="stats-breakdown-list"></div>
+                    </div>
+                </div>
+
+                <!-- Countries & Languages Deep Dive -->
+                <div class="two-col-grid">
+                    <div class="stats-card-box">
+                        <div class="box-header">
+                            <h3>Most Watched Countries</h3>
+                            <span class="box-sub">Click country to browse</span>
+                        </div>
+                        <div id="stats-countries-list" class="stats-breakdown-list"></div>
+                    </div>
+
+                    <div class="stats-card-box">
+                        <div class="box-header">
+                            <h3>Languages Spoken</h3>
+                            <span class="box-sub">Most frequent languages</span>
+                        </div>
+                        <div id="stats-languages-list" class="stats-breakdown-list"></div>
+                    </div>
+                </div>
+
+                <!-- Rating Divergence (Letterboxd Patron Feature) -->
+                <div class="two-col-grid">
+                    <div class="stats-card-box">
+                        <div class="box-header">
+                            <h3>Rated Higher Than Average</h3>
+                            <span class="patron-badge">Underrated</span>
+                        </div>
+                        <div id="stats-rated-higher" class="divergence-list"></div>
+                    </div>
+
+                    <div class="stats-card-box">
+                        <div class="box-header">
+                            <h3>Rated Lower Than Average</h3>
+                            <span class="patron-badge">Controversial</span>
+                        </div>
+                        <div id="stats-rated-lower" class="divergence-list"></div>
                     </div>
                 </div>
             </div>
@@ -208,12 +303,12 @@
     <script src="https://unpkg.com/topojson@3"></script>
 
     <!-- App Scripts with Cache-Busting -->
-    <script src="js/importer.js?v=2.3"></script>
-    <script src="js/app.js?v=2.3"></script>
-    <script src="js/filters.js?v=2.3"></script>
-    <script src="js/charts.js?v=2.3"></script>
-    <script src="js/worldmap.js?v=2.3"></script>
-    <script src="js/recommendations.js?v=2.3"></script>
+    <script src="js/importer.js?v=2.5"></script>
+    <script src="js/app.js?v=2.5"></script>
+    <script src="js/filters.js?v=2.5"></script>
+    <script src="js/charts.js?v=2.5"></script>
+    <script src="js/worldmap.js?v=2.5"></script>
+    <script src="js/recommendations.js?v=2.5"></script>
 
     <!-- Mobile filter toggle -->
     <script>

@@ -1724,4 +1724,566 @@ input:focus, select:focus {
     object-fit: cover;
 }
 
+/* =============================================
+   LETTERBOXD ALL-TIME STATS MODULES
+   ============================================= */
+
+/* 1. Milestones Grid */
+.stats-milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.milestone-card {
+    background: #191f26;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.milestone-card:hover {
+    border-color: var(--accent);
+    background: #202730;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.milestone-poster-wrap {
+    width: 44px;
+    height: 64px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #13171d;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.milestone-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.milestone-placeholder,
+.milestone-stat-icon {
+    font-size: 1.4rem;
+}
+
+.milestone-stat-only {
+    background: linear-gradient(135deg, rgba(32, 40, 50, 0.9), rgba(20, 26, 32, 0.95));
+}
+
+.milestone-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 2px;
+}
+
+.milestone-tag {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.milestone-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #e1e3e5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.milestone-meta {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+/* 2. Stats Section Blocks (Highest Rated & Person Cards) */
+.stats-section-block {
+    margin-bottom: 28px;
+}
+
+.section-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+}
+
+.section-title-row h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #e1e3e5;
+    margin: 0;
+}
+
+.section-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.stats-posters-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.top-rated-film-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: transform 0.2s ease;
+}
+
+.top-rated-film-card:hover {
+    transform: translateY(-4px);
+}
+
+.top-rated-poster-box {
+    aspect-ratio: 2/3;
+    background: #14181c;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+.top-rated-film-card:hover .top-rated-poster-box {
+    border-color: var(--accent);
+    box-shadow: 0 6px 18px rgba(0, 224, 84, 0.25);
+}
+
+.top-rated-poster-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.top-rated-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #00e054;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 224, 84, 0.3);
+}
+
+.top-rated-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #e1e3e5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-rated-year {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* 3. Person Cards Grid (Most Watched Directors & Cast) */
+.person-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.person-stat-card {
+    background: #191f26;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.person-stat-card:hover {
+    border-color: rgba(0, 224, 84, 0.4);
+    background: #1d252e;
+}
+
+.person-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.person-name-link {
+    text-decoration: none;
+    color: #e1e3e5;
+    transition: color 0.15s ease;
+}
+
+.person-name-link:hover {
+    color: var(--accent);
+}
+
+.person-name-link h4 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ext-arrow {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+}
+
+.person-name-link:hover .ext-arrow {
+    transform: translate(2px, -2px);
+    color: var(--accent);
+}
+
+.person-metrics {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.person-count-badge {
+    font-size: 0.72rem;
+    background: #13171d;
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 10px;
+    color: var(--text-secondary);
+}
+
+.person-count-badge strong {
+    color: var(--accent);
+}
+
+.person-avg-badge {
+    font-size: 0.72rem;
+    background: rgba(255, 128, 0, 0.12);
+    color: #ff9800;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.person-films-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.person-film-thumb {
+    width: 48px;
+    height: 72px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #13171d;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.person-film-thumb:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+}
+
+.person-film-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.person-thumb-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    text-align: center;
+    color: var(--text-muted);
+    padding: 4px;
+}
+
+/* 4. Two-Column Deep Dive Grid (Decades, Genres, Countries, Divergence) */
+.two-col-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stats-card-box {
+    background: #191f26;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 8px;
+}
+
+.box-header h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #e1e3e5;
+    margin: 0;
+}
+
+.box-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.patron-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 8px;
+    background: rgba(0, 224, 84, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(0, 224, 84, 0.3);
+}
+
+.stats-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.breakdown-row-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+.breakdown-row-link:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.breakdown-row-link:hover .breakdown-name {
+    color: var(--accent);
+}
+
+.breakdown-name {
+    width: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #cdd6e0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+}
+
+.breakdown-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: #13171d;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.breakdown-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00b84b, #00e054);
+    border-radius: 3px;
+}
+
+.breakdown-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 0.78rem;
+    min-width: 60px;
+    justify-content: flex-end;
+}
+
+.breakdown-count {
+    color: #abb7c4;
+}
+
+.breakdown-count strong {
+    color: #e1e3e5;
+}
+
+.breakdown-avg {
+    color: #ff9800;
+    font-weight: 600;
+}
+
+/* 5. Divergence Lists (Rated Higher / Lower) */
+.divergence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.divergence-item {
+    background: #13171d;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition: all 0.15s ease;
+}
+
+.divergence-item:hover {
+    border-color: var(--accent);
+    background: #171d24;
+}
+
+.divergence-title-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.divergence-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #e1e3e5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.divergence-diff {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 4px;
+}
+
+.divergence-diff.positive {
+    background: rgba(0, 224, 84, 0.15);
+    color: #00e054;
+}
+
+.divergence-diff.negative {
+    background: rgba(238, 119, 82, 0.15);
+    color: #ff6b6b;
+}
+
+.divergence-scores {
+    display: flex;
+    gap: 12px;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+}
+
+.score-user {
+    color: #ff9800;
+    font-weight: 600;
+}
+
+.score-global {
+    color: var(--text-muted);
+}
+
+/* Rating filter toggles */
+.rating-toggles-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.rating-toggle-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.rating-toggle-btn:hover {
+    border-color: #ff9800;
+    color: #fff;
+    background: rgba(255, 152, 0, 0.08);
+}
+
+.rating-toggle-btn.active {
+    background: rgba(255, 152, 0, 0.16);
+    border-color: #ff9800;
+    color: #ff9800;
+    font-weight: 600;
+}
+
+.rating-toggle-btn .toggle-count {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    background: #14181c;
+    padding: 1px 6px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.rating-toggle-btn.active .toggle-count {
+    color: #ff9800;
+    border-color: rgba(255, 152, 0, 0.4);
+}
+
+
 

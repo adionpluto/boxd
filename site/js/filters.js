@@ -1,7 +1,8 @@
-// Filters and Library rendering logic (Cleaned: Genre, Country, Decade, Language)
+// Filters and Library rendering logic (Genre, Rating, Country, Decade, Language)
 
 window.currentFilters = {
     genres: new Set(),
+    ratings: new Set(),
     countries: new Set(),
     decades: new Set(),
     languages: new Set(),
@@ -14,6 +15,7 @@ let filteredFilms = [];
 // Extracted filter data
 let filterData = {
     genres: {},
+    ratings: {},
     countries: new Set(),
     decades: new Set(),
     languages: new Set()
@@ -24,6 +26,11 @@ function getMostRecentWatchDate(film) {
     return [...film.watched_dates].sort().pop();
 }
 
+function getOldestWatchDate(film) {
+    if (!film.watched_dates || film.watched_dates.length === 0) return '9999-99-99';
+    return [...film.watched_dates].sort()[0];
+}
+
 function processFilterData() {
     allLibraryFilms = window.CineData.films.filter(f => 
         f.in_diary || (f.watched_dates && f.watched_dates.length > 0) || f.rating !== null
@@ -31,6 +38,7 @@ function processFilterData() {
 
     filterData = {
         genres: {},
+        ratings: {},
         countries: new Set(),
         decades: new Set(),
         languages: new Set()
@@ -42,6 +50,13 @@ function processFilterData() {
             film.genres.forEach(g => {
                 filterData.genres[g] = (filterData.genres[g] || 0) + 1;
             });
+        }
+        // Ratings
+        if (film.rating !== null && film.rating !== undefined) {
+            const rKey = film.rating.toFixed(1);
+            filterData.ratings[rKey] = (filterData.ratings[rKey] || 0) + 1;
+        } else {
+            filterData.ratings['unrated'] = (filterData.ratings['unrated'] || 0) + 1;
         }
         // Countries
         if (film.countries) {
@@ -59,13 +74,57 @@ function processFilterData() {
     });
 }
 
+function formatRatingLabel(rKey) {
+    if (rKey === 'unrated') return 'Unrated';
+    const val = parseFloat(rKey);
+    let stars = '';
+    const fullStars = Math.floor(val);
+    const halfStar = (val % 1 !== 0);
+    stars = '★'.repeat(fullStars) + (halfStar ? '½' : '');
+    return `${stars} (${val.toFixed(1)})`;
+}
+
 function renderFilters() {
     const container = document.getElementById('filter-container');
     if (!container) return;
     
     container.innerHTML = '';
     
-    // 1. Genres
+    // 1. Rating Filter (Faceted star pills)
+    const ratingSection = document.createElement('div');
+    ratingSection.className = 'filter-section';
+    ratingSection.innerHTML = '<h4>Rating</h4>';
+    const ratingList = document.createElement('div');
+    ratingList.className = 'filter-toggles rating-toggles-grid';
+
+    // Standard Letterboxd ratings: 5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5, unrated
+    const standardRatings = ['5.0', '4.5', '4.0', '3.5', '3.0', '2.5', '2.0', '1.5', '1.0', '0.5', 'unrated'];
+    
+    standardRatings.forEach(rKey => {
+        const count = filterData.ratings[rKey] || 0;
+        if (count === 0 && rKey !== 'unrated') return; // Hide empty ratings
+
+        const btn = document.createElement('button');
+        const isActive = window.currentFilters.ratings.has(rKey);
+        btn.className = 'toggle-btn rating-toggle-btn' + (isActive ? ' active' : '');
+        btn.innerHTML = `<span>${formatRatingLabel(rKey)}</span> <small class="toggle-count">${count}</small>`;
+        
+        btn.onclick = () => {
+            if (window.currentFilters.ratings.has(rKey)) {
+                window.currentFilters.ratings.delete(rKey);
+            } else {
+                window.currentFilters.ratings.add(rKey);
+            }
+            btn.classList.toggle('active');
+            applyFilters();
+        };
+        ratingList.appendChild(btn);
+    });
+
+    ratingSection.appendChild(ratingList);
+    container.appendChild(ratingSection);
+
+    // 2. Genres
     const genreSection = document.createElement('div');
     genreSection.className = 'filter-section';
     genreSection.innerHTML = '<h4>Genres</h4>';
@@ -110,7 +169,7 @@ function renderFilters() {
     genreSection.appendChild(genreList);
     container.appendChild(genreSection);
 
-    // 2. Country (Searchable Autocomplete)
+    // 3. Country (Searchable Autocomplete)
     const countrySection = document.createElement('div');
     countrySection.className = 'filter-section';
     countrySection.innerHTML = '<h4>Country</h4>';
@@ -158,7 +217,7 @@ function renderFilters() {
     countrySection.appendChild(countryWrapper);
     container.appendChild(countrySection);
 
-    // 3. Decade
+    // 4. Decade
     const decadeSection = document.createElement('div');
     decadeSection.className = 'filter-section';
     decadeSection.innerHTML = '<h4>Decade</h4>';
@@ -179,7 +238,7 @@ function renderFilters() {
     decadeSection.appendChild(decadeList);
     container.appendChild(decadeSection);
 
-    // 4. Language
+    // 5. Language
     const langSection = document.createElement('div');
     langSection.className = 'filter-section';
     langSection.innerHTML = '<h4>Language</h4>';
@@ -224,6 +283,7 @@ function renderActivePills() {
         container.appendChild(pill);
     };
 
+    window.currentFilters.ratings.forEach(r => addPill(`Rating: ${formatRatingLabel(r)}`, () => { window.currentFilters.ratings.delete(r); applyFilters(); }));
     window.currentFilters.genres.forEach(g => addPill(`Genre: ${g}`, () => { window.currentFilters.genres.delete(g); applyFilters(); }));
     window.currentFilters.countries.forEach(c => addPill(`Country: ${c}`, () => { window.currentFilters.countries.delete(c); applyFilters(); }));
     window.currentFilters.decades.forEach(d => addPill(`Decade: ${d}`, () => { window.currentFilters.decades.delete(d); applyFilters(); }));
@@ -235,6 +295,7 @@ function renderActivePills() {
         clearBtn.onclick = () => {
             window.currentFilters = {
                 genres: new Set(),
+                ratings: new Set(),
                 countries: new Set(),
                 decades: new Set(),
                 languages: new Set(),
@@ -247,6 +308,17 @@ function renderActivePills() {
 
 function applyFilters() {
     filteredFilms = allLibraryFilms.filter(film => {
+        // Ratings (ANY selected rating)
+        if (window.currentFilters.ratings.size > 0) {
+            const hasUnrated = window.currentFilters.ratings.has('unrated');
+            if (film.rating === null || film.rating === undefined) {
+                if (!hasUnrated) return false;
+            } else {
+                const rStr = film.rating.toFixed(1);
+                if (!window.currentFilters.ratings.has(rStr)) return false;
+            }
+        }
+
         // Genres (ANY)
         if (window.currentFilters.genres.size > 0) {
             if (!film.genres || !film.genres.some(g => window.currentFilters.genres.has(g))) return false;
@@ -277,12 +349,24 @@ function applyFilters() {
         switch (window.currentFilters.sort) {
             case 'Date Watched ↓':
                 return getMostRecentWatchDate(b).localeCompare(getMostRecentWatchDate(a));
+            case 'Date Watched ↑':
+                return getOldestWatchDate(a).localeCompare(getOldestWatchDate(b));
             case 'Rating ↓':
-                return (b.rating || 0) - (a.rating || 0);
+                return (b.rating ?? -1) - (a.rating ?? -1) || ((b.year || 0) - (a.year || 0));
+            case 'Rating ↑':
+                return (a.rating ?? 99) - (b.rating ?? 99) || ((a.year || 0) - (b.year || 0));
             case 'Year ↓':
                 return (b.year || 0) - (a.year || 0);
+            case 'Year ↑':
+                return (a.year || 0) - (b.year || 0);
             case 'Title A-Z':
                 return (a.title || '').localeCompare(b.title || '');
+            case 'Title Z-A':
+                return (b.title || '').localeCompare(a.title || '');
+            case 'Runtime ↓':
+                return (b.runtime || 0) - (a.runtime || 0);
+            case 'Runtime ↑':
+                return (a.runtime || 9999) - (b.runtime || 9999);
             default:
                 return 0;
         }
@@ -319,6 +403,7 @@ window.initFilters = function() {
 window.filterByCountry = function(countryCode) {
     window.currentFilters = {
         genres: new Set(),
+        ratings: new Set(),
         countries: new Set(),
         decades: new Set(),
         languages: new Set(),
