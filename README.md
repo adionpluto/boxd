@@ -13,14 +13,15 @@ features:
 
 ---
 how to update your data:
-#a: in-browser instant sync (no terminal required)
-1. export your data from letterboxd: **letterboxd → settings → data → export your data** (downloads a `.zip` file).
-2. open **boxd** in your browser.
-3. click the **sync data** button in the top navigation bar.
-4. drag & drop your downloaded `.zip` file (or individual .csv files).
-5. your updated profile should be loaded shortly after that.
+
+a: in-browser instant sync (no terminal required)
+I. export your data from letterboxd: **letterboxd → settings → data → export your data** (downloads a `.zip` file).
+II. open **boxd** in your browser.
+III. click the **sync data** button in the top navigation bar.
+IV. drag & drop your downloaded `.zip` file (or individual .csv files).
+V. your updated profile should be loaded shortly after that.
    
-#b: review locally
+b: review locally
 ```bash
 cd site
 python -m http.server 8080
