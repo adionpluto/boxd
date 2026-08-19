@@ -1,0 +1,7 @@
+<USER_REQUEST>
+these are my csv files and my TMDb API KEY is: 2a676a111220c1f9a4e2550238a9a294
+now i want it to work like this: my TMDb API key can be permament but my csv data, i want to be able to upload it again and again as i watch more films so i can update it once in a while. so, for the "login" page, once you click on login, you'll be prompted to upload your csv data, this will accept the zip file letterboxd provides with all your csv files and once you upload this, your profile and stats would show up on this. make it work like this and then deploy this website.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-08-19T21:25:58+05:30.
+</ADDITIONAL_METADATA>
