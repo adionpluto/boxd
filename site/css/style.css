@@ -287,8 +287,6 @@ ul { list-style: none; }
     padding-bottom: 4px;
 }
 
-.filter-group:last-child { border-bottom: none; }
-
 .filter-group-header {
     display: flex;
     justify-content: space-between;
@@ -297,6 +295,8 @@ ul { list-style: none; }
     font-weight: 600;
     font-size: 0.8rem;
     padding: 10px 0;
+}
+
 /* =============================================
    FILTER SECTIONS & CHECKBOXES
    ============================================= */
