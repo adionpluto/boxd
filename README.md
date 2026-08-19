@@ -1,6 +1,6 @@
 # boxd 🎬
 
-a minimalist, personal archive and tracker for your letterboxd history.
+a minimalist, personal archive and tracker of your letterboxd history.
 ---
 features:
 
