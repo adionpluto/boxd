@@ -1,0 +1,69 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'data/**'
+      - 'build/**'
+      - 'site/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 0'  # Weekly Sunday 6am UTC
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Restore TMDb cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: tmdb-cache-${{ hashFiles('data/*.csv') }}
+          restore-keys: |
+            tmdb-cache-
+
+      - name: Install dependencies
+        run: |
+          if [ -f build/requirements.txt ]; then pip install -r build/requirements.txt; fi
+
+      - name: Enrich film data & generate recommendations
+        run: |
+          python build/build_all.py
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY || '2a676a111220c1f9a4e2550238a9a294' }}
+          TMDB_REGION: IN
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
