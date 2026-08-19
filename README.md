@@ -1,12 +1,15 @@
 # boxd
 
-a minimalist, archive and tracker for your letterboxd history.
+a minimalist, personal archive and tracker for your letterboxd history.
 
 ---
 features:
-~ filter your activity feed by activity type
-~ personalized stats pages (sorting films by year, genre, country, director)
-~ recommendations based on your watched/watchlist set of films.
+
+- filter your activity feed by activity type.
+  
+- personalized stats pages (sorting films by year, genre, country, director).
+  
+- recommendations based on your watched/watchlist set of films.
 
 ---
 how to update your data:
@@ -58,5 +61,8 @@ boxd/
 
 ---
 attribution & license:
-~ movie metadata and poster artwork provided by **the movie database (TMDb)**.
-~ *this product uses the TMDb api but is not endorsed or certified by TMDb.*
+
+- movie metadata and poster artwork provided by **the movie database (TMDb)**.
+  
+  *this product uses the TMDb api but is not endorsed or certified by TMDb or by Letterboxd.*
+  
