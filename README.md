@@ -16,7 +16,7 @@ access:
 a: in-browser instant sync (no terminal required!)
 
 1. export your data from letterboxd: **letterboxd → settings → data → export your data** (downloads a `.zip` file).
-2. open [boxd](https://adionpluto.github.io/boxd/).
+2. open [boxd](https://adionpluto.github.io/boxd/) (this shall contain my data by default).
 3. click the **sync data** button (top-right corner) of the navigation bar.
 4. drag & drop your downloaded `.zip` file (or individual .csv files).
 5. your personalized account shall now be ready in a moment.
