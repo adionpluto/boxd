@@ -14,7 +14,7 @@ features:
 ---
 how to update your data:
 
-a: in-browser instant sync (no terminal required; open the website: adionpluto.github.io/boxd/)
+a: in-browser instant sync (no terminal required; website: [boxd](https://adionpluto.github.io/boxd/)
 1. export your data from letterboxd: **letterboxd → settings → data → export your data** (downloads a `.zip` file).
 2. open **boxd** in your browser.
 3. click the **sync data** button in the top navigation bar.
