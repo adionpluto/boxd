@@ -14,7 +14,7 @@ features:
 ---
 how to update your data:
 
-a: in-browser instant sync (no terminal required)
+a: in-browser instant sync (no terminal required; open the website: "username".github.io/boxd/)
 1. export your data from letterboxd: **letterboxd → settings → data → export your data** (downloads a `.zip` file).
 2. open **boxd** in your browser.
 3. click the **sync data** button in the top navigation bar.
