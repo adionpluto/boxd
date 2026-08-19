@@ -37,10 +37,10 @@ boxd/
 ├── .github/workflows/build.yml   ← ci/cd automatic build and deploy
 ├── build/
 │   ├── build_all.py              ← fast multi-threaded enrichment pipeline
-│   ├── enrich.py                 ← core tmdb fetch & normalizer
+│   ├── enrich.py                 ← core TMDb fetch & normalizer
 │   ├── recommend.py              ← content-based recommendation algorithm
 │   └── requirements.txt
-├── data/                         ← letterboxd csvs & tmdb cache
+├── data/                         ← letterboxd .csv files & TMDb cache
 │   ├── profile.csv
 │   ├── ratings.csv
 │   ├── watched.csv
@@ -54,7 +54,7 @@ boxd/
     │   └── enriched.json         ← pre-bundled complete dataset
     └── js/
         ├── app.js                ← core app state & navigation
-        ├── importer.js           ← in-browser zip/csv parser & tmdb enricher
+        ├── importer.js           ← in-browser zip/csv parser & TMDb enricher
         ├── filters.js            ← faceted filters & library grid
         ├── charts.js             ← chart.js analytics & heatmap
         ├── worldmap.js           ← d3.js full-screen choropleth map
@@ -64,6 +64,6 @@ boxd/
 ---
 attribution & license:
 
-- movie metadata and poster artwork provided by **the movie database (tmdb)**.
+- movie metadata and poster artwork provided by **the movie database (TMDb)**.
 
-  *this product uses the tmdb api but is not endorsed or certified by tmdb.*
+  *this product uses the TMDb api but is not endorsed or certified by TMDb.*
