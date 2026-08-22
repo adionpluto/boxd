@@ -25,7 +25,6 @@ b: review locally
 `ash
 cd site
 python -m http.server 8080
-# open http://localhost:8080 in your browser
 `
 
 ---
