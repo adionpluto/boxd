@@ -22,16 +22,16 @@ a: in-browser instant sync (no terminal required; website: [boxd](https://adionp
 5. your updated profile should be loaded shortly after that.
    
 b: review locally
-```
-bash
+`ash
 cd site
 python -m http.server 8080
-```
+# open http://localhost:8080 in your browser
+`
 
 ---
 project structure:
 
-```
+`
 boxd/
 ├── .github/workflows/build.yml   ← ci/cd automatic build and deploy
 ├── build/
@@ -49,6 +49,7 @@ boxd/
     ├── .nojekyll                 ← github pages static bypass
     ├── css/
     │   └── style.css             ← dark cinematic styling & modals
+    ├── data/
     │   └── enriched.json         ← pre-bundled complete dataset
     └── js/
         ├── app.js                ← core app state & navigation
@@ -57,7 +58,7 @@ boxd/
         ├── charts.js             ← chart.js analytics & heatmap
         ├── worldmap.js           ← d3.js full-screen choropleth map
         └── recommendations.js    ← personalized recommendations ui
-```
+`
 
 ---
 attribution & license:
