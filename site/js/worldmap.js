@@ -83,13 +83,15 @@ class WorldMap {
 
     getCountryColor(count) {
         if (!count || count <= 0) {
-            return '#252D37';
+            return '#252D37'; // Clean dark slate charcoal for all unwatched countries
         }
-        const maxVal = Math.max(this.maxFilms, 10);
-        const t = Math.log(count) / Math.log(maxVal);
-        return d3.interpolateRgbBasis([
-            '#008C3B', '#00A846', '#00C44E', '#00E054', '#24E565'
-        ])(Math.min(Math.max(t, 0), 1));
+        
+        // Authentic discrete Letterboxd green steps
+        if (count === 1) return '#008738';
+        if (count <= 4) return '#00A846';
+        if (count <= 15) return '#00C44E';
+        if (count <= 50) return '#00E054';
+        return '#24E565';
     }
 
     debounce(func, wait) {
@@ -124,14 +126,14 @@ class WorldMap {
     draw() {
         this.container.innerHTML = '';
 
-        // Title above the map (HTML, not SVG — so it never collides)
+        // Title above the map
         const title = document.createElement('div');
         title.textContent = 'WORLD MAP';
-        title.style.cssText = 'text-align:center;color:#667788;font-size:11px;font-weight:700;letter-spacing:0.15em;padding:10px 0 6px;font-family:Inter,sans-serif;';
+        title.style.cssText = 'text-align:center;color:#667788;font-size:11px;font-weight:700;letter-spacing:0.15em;padding:14px 0 8px;font-family:Inter,sans-serif;text-transform:uppercase;';
         this.container.appendChild(title);
         
         const width = this.container.clientWidth || 1200;
-        const height = (this.container.clientHeight || Math.max(window.innerHeight - 150, 600)) - 30;
+        const height = (this.container.clientHeight || Math.max(window.innerHeight - 150, 600)) - 36;
         
         const svg = d3.select(this.container).append("svg")
             .attr("width", "100%")
@@ -142,7 +144,7 @@ class WorldMap {
         // Bottom right attribution
         svg.append("text")
             .attr("x", width - 20)
-            .attr("y", height - 16)
+            .attr("y", height - 14)
             .attr("text-anchor", "end")
             .attr("fill", "#445566")
             .attr("font-size", "10px")
@@ -153,9 +155,15 @@ class WorldMap {
         const projection = d3.geoNaturalEarth1();
         const path = d3.geoPath().projection(projection);
 
-        // Convert TopoJSON to GeoJSON features
+        // Convert TopoJSON to GeoJSON features and exclude Antarctica (numericId 010)
         const countriesGeo = topojson.feature(this.topojsonData, this.topojsonData.objects.countries);
-        projection.fitSize([width, height - 30], countriesGeo);
+        countriesGeo.features = countriesGeo.features.filter(d => {
+            const numericId = String(d.id).padStart(3, '0');
+            return numericId !== "010" && d.id !== "010" && d.id !== 10;
+        });
+
+        // Fit map neatly into the viewport with padding
+        projection.fitExtent([[15, 8], [width - 15, height - 24]], countriesGeo);
         
         g.attr("transform", "translate(0, 0)");
 
