@@ -83,13 +83,13 @@ class WorldMap {
 
     getCountryColor(count) {
         if (!count || count <= 0) {
-            return '#252D37'; // Clean dark slate charcoal for all unwatched countries
+            return '#242C34'; // Exact Letterboxd unwatched charcoal slate
         }
         
-        // Authentic discrete Letterboxd green steps
-        if (count === 1) return '#008738';
-        if (count <= 4) return '#00A846';
-        if (count <= 15) return '#00C44E';
+        // Exact Letterboxd green spectrum
+        if (count === 1) return '#008035';
+        if (count <= 4) return '#009E42';
+        if (count <= 15) return '#00BD4F';
         if (count <= 50) return '#00E054';
         return '#24E565';
     }
@@ -129,7 +129,7 @@ class WorldMap {
         // Title above the map
         const title = document.createElement('div');
         title.textContent = 'WORLD MAP';
-        title.style.cssText = 'text-align:center;color:#667788;font-size:11px;font-weight:700;letter-spacing:0.15em;padding:14px 0 8px;font-family:Inter,sans-serif;text-transform:uppercase;';
+        title.style.cssText = 'text-align:center;color:#667788;font-size:11px;font-weight:700;letter-spacing:0.15em;padding:16px 0 8px;font-family:Inter,sans-serif;text-transform:uppercase;';
         this.container.appendChild(title);
         
         const width = this.container.clientWidth || 1200;
@@ -139,7 +139,7 @@ class WorldMap {
             .attr("width", "100%")
             .attr("height", height)
             .attr("viewBox", `0 0 ${width} ${height}`)
-            .style("background", "#0C1014");
+            .style("background", "#14181C");
 
         // Bottom right attribution
         svg.append("text")
