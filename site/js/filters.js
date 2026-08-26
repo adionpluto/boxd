@@ -58,9 +58,12 @@ function processFilterData() {
         } else {
             filterData.ratings['unrated'] = (filterData.ratings['unrated'] || 0) + 1;
         }
-        // Countries
-        if (film.countries) {
-            film.countries.forEach(c => filterData.countries.add(c.name));
+        // Countries (Primary production country only)
+        if (film.countries && film.countries.length > 0) {
+            const primary = film.countries[0];
+            if (primary && primary.name) {
+                filterData.countries.add(primary.name);
+            }
         }
         // Decades
         if (film.year) {
@@ -324,9 +327,13 @@ function applyFilters() {
             if (!film.genres || !film.genres.some(g => window.currentFilters.genres.has(g))) return false;
         }
         
-        // Countries (ANY)
+        // Countries (Primary production country only)
         if (window.currentFilters.countries.size > 0) {
-            if (!film.countries || !film.countries.some(c => window.currentFilters.countries.has(c.name) || window.currentFilters.countries.has(c.code))) return false;
+            if (!film.countries || film.countries.length === 0) return false;
+            const primary = film.countries[0];
+            const nameMatch = primary.name && window.currentFilters.countries.has(primary.name);
+            const codeMatch = primary.code && (window.currentFilters.countries.has(primary.code) || window.currentFilters.countries.has(primary.code.toUpperCase()));
+            if (!nameMatch && !codeMatch) return false;
         }
 
         // Decades (ANY)
@@ -407,16 +414,32 @@ window.filterByCountry = function(countryCode) {
         countries: new Set(),
         decades: new Set(),
         languages: new Set(),
-        sort: 'Date Watched ↓'
+        sort: 'Rating ↓'
     };
     
+    const codeUpper = (countryCode || '').toUpperCase().trim();
     let cName = countryCode;
+    
+    // Find name from films where this code is the PRIMARY country
     for (let f of window.CineData.films) {
-        if (f.countries) {
-            let c = f.countries.find(c => c.code === countryCode || c.code === countryCode.toUpperCase());
-            if (c) {
-                cName = c.name;
+        if (f.countries && f.countries.length > 0) {
+            const primary = f.countries[0];
+            if (primary && primary.code && primary.code.toUpperCase() === codeUpper) {
+                cName = primary.name;
                 break;
+            }
+        }
+    }
+    
+    // Fallback if not found in primary
+    if (cName === countryCode) {
+        for (let f of window.CineData.films) {
+            if (f.countries) {
+                let c = f.countries.find(c => (c.code || '').toUpperCase() === codeUpper);
+                if (c && c.name) {
+                    cName = c.name;
+                    break;
+                }
             }
         }
     }

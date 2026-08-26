@@ -413,14 +413,13 @@ function renderCountriesBreakdown(films) {
 
     const countryStats = {};
     films.forEach(f => {
-        if (f.countries && Array.isArray(f.countries)) {
-            f.countries.forEach(c => {
-                const name = c.name;
-                if (name) {
-                    if (!countryStats[name]) countryStats[name] = { name, code: c.code, films: [] };
-                    countryStats[name].films.push(f);
-                }
-            });
+        if (f.countries && Array.isArray(f.countries) && f.countries.length > 0) {
+            const primary = f.countries[0];
+            const name = primary.name;
+            if (name) {
+                if (!countryStats[name]) countryStats[name] = { name, code: primary.code, films: [] };
+                countryStats[name].films.push(f);
+            }
         }
     });
 
