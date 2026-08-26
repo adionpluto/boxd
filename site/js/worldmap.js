@@ -41,11 +41,14 @@ class WorldMap {
         };
 
         // Count films per country using alpha-2 codes (watched films only)
+        // Only count a film for its PRIMARY production countries (first 2 listed)
+        // to avoid co-production noise (e.g. an Indian film showing under Norway)
         this.countryStats = {};
         const watchedFilms = this.films.filter(f => (f.watched_dates && f.watched_dates.length > 0) || f.in_diary);
         watchedFilms.forEach(film => {
             if (film.countries && Array.isArray(film.countries)) {
-                film.countries.forEach(c => {
+                const primaryCountries = film.countries.slice(0, 1);
+                primaryCountries.forEach(c => {
                     if (c.code) {
                         let code = c.code.toUpperCase().trim();
                         if (this.COUNTRY_ALIASES[code]) {
@@ -120,26 +123,23 @@ class WorldMap {
 
     draw() {
         this.container.innerHTML = '';
+
+        // Title above the map (HTML, not SVG — so it never collides)
+        const title = document.createElement('div');
+        title.textContent = 'WORLD MAP';
+        title.style.cssText = 'text-align:center;color:#667788;font-size:11px;font-weight:700;letter-spacing:0.15em;padding:10px 0 6px;font-family:Inter,sans-serif;';
+        this.container.appendChild(title);
         
         const width = this.container.clientWidth || 1200;
-        const height = this.container.clientHeight || Math.max(window.innerHeight - 150, 600);
+        const height = (this.container.clientHeight || Math.max(window.innerHeight - 150, 600)) - 30;
         
         const svg = d3.select(this.container).append("svg")
             .attr("width", "100%")
-            .attr("height", "100%")
+            .attr("height", height)
             .attr("viewBox", `0 0 ${width} ${height}`)
             .style("background", "#0C1014");
 
-        svg.append("text")
-            .attr("x", width / 2)
-            .attr("y", 28)
-            .attr("text-anchor", "middle")
-            .attr("fill", "#667788")
-            .attr("font-size", "11px")
-            .attr("font-weight", "700")
-            .attr("letter-spacing", "0.15em")
-            .text("WORLD MAP");
-
+        // Bottom right attribution
         svg.append("text")
             .attr("x", width - 20)
             .attr("y", height - 16)
@@ -155,9 +155,9 @@ class WorldMap {
 
         // Convert TopoJSON to GeoJSON features
         const countriesGeo = topojson.feature(this.topojsonData, this.topojsonData.objects.countries);
-        projection.fitSize([width - 40, height - 60], countriesGeo);
+        projection.fitSize([width, height - 30], countriesGeo);
         
-        g.attr("transform", "translate(20, 20)");
+        g.attr("transform", "translate(0, 0)");
 
         g.selectAll("path")
             .data(countriesGeo.features)
