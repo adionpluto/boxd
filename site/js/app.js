@@ -237,20 +237,91 @@ function updateHeaderMeta() {
 }
 
 function initWatchlist() {
-    const watchlist = window.CineData.films.filter(f => f.in_watchlist);
+    const allWatchlist = window.CineData.films.filter(f => f.in_watchlist);
+    
+    // Store globally so genre filter clicks can re-render
+    window._watchlistFilms = allWatchlist;
+    window._watchlistGenre = null;
+
+    // Extract all genres from watchlist, sorted by frequency
+    const genreCounts = {};
+    allWatchlist.forEach(film => {
+        if (film.genres && Array.isArray(film.genres)) {
+            film.genres.forEach(g => {
+                genreCounts[g] = (genreCounts[g] || 0) + 1;
+            });
+        }
+    });
+    const sortedGenres = Object.entries(genreCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name]) => name);
+
+    // Render genre filter pills
+    const filtersEl = document.getElementById('watchlist-genre-filters');
+    if (filtersEl && sortedGenres.length > 0) {
+        filtersEl.innerHTML = '';
+
+        const allPill = document.createElement('button');
+        allPill.className = 'watchlist-genre-pill active';
+        allPill.innerHTML = `<span>All</span> <span class="watchlist-genre-count">${allWatchlist.length.toLocaleString()}</span>`;
+        allPill.addEventListener('click', () => {
+            window._watchlistGenre = null;
+            renderWatchlistGrid();
+            filtersEl.querySelectorAll('.watchlist-genre-pill').forEach(p => p.classList.remove('active'));
+            allPill.classList.add('active');
+        });
+        filtersEl.appendChild(allPill);
+
+        sortedGenres.forEach(genre => {
+            const pill = document.createElement('button');
+            pill.className = 'watchlist-genre-pill';
+            pill.innerHTML = `<span>${genre}</span> <span class="watchlist-genre-count">${genreCounts[genre].toLocaleString()}</span>`;
+            pill.addEventListener('click', () => {
+                if (window._watchlistGenre === genre) {
+                    window._watchlistGenre = null;
+                    filtersEl.querySelectorAll('.watchlist-genre-pill').forEach(p => p.classList.remove('active'));
+                    allPill.classList.add('active');
+                } else {
+                    window._watchlistGenre = genre;
+                    filtersEl.querySelectorAll('.watchlist-genre-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                }
+                renderWatchlistGrid();
+            });
+            filtersEl.appendChild(pill);
+        });
+    }
+
+    renderWatchlistGrid();
+}
+
+function renderWatchlistGrid() {
+    const allWatchlist = window._watchlistFilms || [];
+    const selectedGenre = window._watchlistGenre;
+
+    const filtered = selectedGenre
+        ? allWatchlist.filter(f => f.genres && f.genres.includes(selectedGenre))
+        : allWatchlist;
+
     const countEl = document.getElementById('watchlist-count');
-    if (countEl) countEl.textContent = `${watchlist.length} films`;
+    if (countEl) {
+        if (selectedGenre) {
+            countEl.textContent = `${filtered.length.toLocaleString()} of ${allWatchlist.length.toLocaleString()} films`;
+        } else {
+            countEl.textContent = `${allWatchlist.length.toLocaleString()} films`;
+        }
+    }
 
     const grid = document.getElementById('watchlist-grid');
     if (!grid) return;
     grid.innerHTML = '';
 
-    if (watchlist.length === 0) {
-        grid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 60px 0;">Your watchlist is empty.</p>';
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 60px 0;">No films match this filter.</p>';
         return;
     }
 
-    watchlist.forEach(film => {
+    filtered.forEach(film => {
         const card = createWatchlistCard(film);
         grid.appendChild(card);
     });
@@ -297,6 +368,13 @@ function createWatchlistCard(film) {
             ${streamingHtml}
         </div>
     `;
+
+    // Click to open Letterboxd page
+    if (film.letterboxd_uri) {
+        card.addEventListener('click', () => {
+            window.open(film.letterboxd_uri, '_blank');
+        });
+    }
 
     return card;
 }

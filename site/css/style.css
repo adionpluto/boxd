@@ -893,6 +893,55 @@ input:focus, select:focus {
     font-weight: 500;
 }
 
+/* Watchlist Genre Filter Pills */
+.watchlist-genre-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.watchlist-genre-pill {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.watchlist-genre-pill:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+    background: rgba(0, 224, 84, 0.08);
+}
+
+.watchlist-genre-pill.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+}
+
+.watchlist-genre-pill .watchlist-genre-count {
+    font-size: 0.72rem;
+    opacity: 0.7;
+}
+
+.watchlist-genre-pill.active .watchlist-genre-count {
+    color: #000;
+    opacity: 0.85;
+}
+
 /* Streaming badges */
 .streaming-badges {
     display: flex;
